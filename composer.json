@@ -1,0 +1,23 @@
+{
+    "name": "kevincio/cms-stringley",
+    "description": "",
+    "authors": [
+        {
+            "name": "Kevin Woodard",
+            "email": "octowin@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.1.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Kevincio\\CmsStringley\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
