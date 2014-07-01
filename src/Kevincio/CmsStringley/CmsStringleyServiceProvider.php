@@ -1,6 +1,7 @@
 <?php namespace Kevincio\CmsStringley;
 
 use Illuminate\Support\ServiceProvider;
+use Route;
 
 class CmsStringleyServiceProvider extends ServiceProvider {
 
@@ -11,6 +12,8 @@ class CmsStringleyServiceProvider extends ServiceProvider {
 	 */
 	protected $defer = false;
 
+	public $debug;
+
 	/**
 	 * Bootstrap the application events.
 	 *
@@ -19,6 +22,23 @@ class CmsStringleyServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('kevincio/cms-stringley');
+
+		Route::get('/cms-stringley',					array('uses' =>	'Stringley::StringleyController@adminHome',		'as'	=>	'stringleyHome'));
+
+		//$this->debug = Config::get('cms-stringley::debug');
+/*
+		// Define Stringley Routes
+		// Stringley Home
+		Route::get('/cms-stringley',					array('uses' =>	'StringleyController@adminHome',		'as'	=>	'stringleyHome'));
+		// Add a new Stringley
+		Route::get('/cms-stringley/add',				array('uses' =>	'StringleyController@adminAdd',			'as'	=>	'stringleyAdd'));
+		Route::post('/cms-stringley/add',				array('uses' =>	'StringleyController@adminAddSubmit',	'as'	=>	'stringleyAddSubmit'));
+		// Edit an existing Stringley
+		Route::get('/cms-stringley/edit/{id}',			array('uses' =>	'StringleyController@adminEdit',		'as'	=>	'stringleyEdit'));
+		Route::post('/cms-stringley/edit/{id}',			array('uses' =>	'StringleyController@adminEditSubmit',  'as'	=>	'stringleyEditSubmit'));
+		// Delete an existing Stringley
+		Route::get('/cms-stringley/delete/{id}',		array('uses' =>	'StringleyController@adminDelete',		'as'	=>	'stringleyDelete'));
+*/
 	}
 
 	/**
@@ -28,7 +48,16 @@ class CmsStringleyServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		//
+		$this->app['stringley'] = $this->app->share(function($app)
+		{
+			return new Stringley;
+		});
+
+		$this->app->booting(function()
+		{
+			$loader = \Illuminate\Foundation\AliasLoader::getInstance();
+			$loader->alias('Stringley', 'Kevincio\cms-stringley\Facades\Stringley');
+		});
 	}
 
 	/**
@@ -38,7 +67,7 @@ class CmsStringleyServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return array('Stringley');
 	}
 
 }
